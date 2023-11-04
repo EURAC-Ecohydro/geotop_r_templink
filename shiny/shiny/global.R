@@ -16,6 +16,8 @@ library(geotopbricks)
 library(lubridate)
 library(leaflet)
 library(sf)
+library(data.table)
+library(dplyr)
 
 wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
 tz="Etc/GMT-1" ## check on geotop.inpts
@@ -50,13 +52,30 @@ variables  <- list(
 )
 
 variable_default <- "Total_Soil_Water_pressure"
+
 time_default <- start+seconds(as.numeric(end-start,unit="secs")*0.8)
+time0_default <- start+seconds(as.numeric(end-start,unit="secs")*0.15)
 basemaps <- c("OpenTopoMap","Esri.WorldImagery")
 
 
+meteo <- get.geotop.points(prefix="MeteoStation",suffix=c("Code","Name_DE","Name_IT","Elevation"),wpath=wpath)
+meteo <- meteo %>% st_transform(crs=4326)
+### WEATHER STATIONS
 
 
+## Reactive values
 
 
+# ## boolean option It is 1 when App is launching, it becomes FALSE during its execution. 
+### LEAFLET INITALIZATION 
+##
 
 
+# bbox <- st_bbox(meteo)
+# west <- bbox$xmin
+# south <- bbox$ymin
+# east <- bbox$xmax
+# north <- bbox$ymax
+# outleaf <- leaflet() %>% addProviderTiles(basemaps[1])  %>% fitBounds(west, south, east, north) 
+# 
+# 

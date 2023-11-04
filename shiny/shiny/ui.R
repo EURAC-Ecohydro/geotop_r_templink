@@ -18,37 +18,42 @@ source("./global.R")
 ui <- fluidPage(
   title = "GEOtop Option",
   sidebarLayout(
+    column(4,  # Adjust the width here
     #sidebarPanel(
-    conditionalPanel(
-      'input.geotop === "Results"',
-      sidebarPanel(
+    # conditionalPanel(
+    #   'input.geotop === "Results"',
+      sidebarPanel(width='100%',
         radioButtons("basemap",label="basemap",choices = (basemaps),selected=basemaps[1]),
         
         selectInput("variable", label = "Variable",
-                    choices = names(variables), selected = variable_default),
+                    choices = names(variables), selected = variable_default,width='100%'),
         selectInput("layer", label = "layer",
                     choices = 1:5, selected = 1),
         sliderInput("time", label = "time:",
                     min = start, max = end, value = time_default, step = 0.2),
+        sliderInput("time0", label = "time0:",
+                    min = start, max = end, value = time0_default, step = 0.2),
         checkboxInput("meteo","Weather Stations",value=FALSE)
-      ),
-      conditionalPanel(
-        'input.dataset === "mtcars"',
-        helpText("Click the column header to sort a column.")
-      ),
-      conditionalPanel(
-        'input.dataset === "iris"',
-        helpText("Display 5 records by default.")
       )
+      # conditionalPanel(
+      #   'input.dataset === "Weather_Forcings"',
+      #   helpText("Click the column header to sort a column.")
+      # ),
+      # conditionalPanel(
+      #   'input.dataset === "iris"',
+      #   helpText("Display 5 records by default.")
+      # )
+
     )
     #)
     ,
-    mainPanel(
+  #  mainPanel(
+      #leafletOutput("map2")
+  column(8,
       tabsetPanel(
-        id = 'geotop',
         tabPanel("Results", leafletOutput("map2")),
-        tabPanel("Weather_Forcings", DT::dataTableOutput("mytable2")),
-        tabPanel("iris", DT::dataTableOutput("mytable3"))
+        tabPanel("Weather_Forcings", leafletOutput("map3"),height = 800), ##DT::dataTableOutput("mytable2")),
+        tabPanel("Tab 2",tableOutput("meteo_station_table"))
       )
     )
   )
