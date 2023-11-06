@@ -18,6 +18,8 @@ library(leaflet)
 library(sf)
 library(data.table)
 library(dplyr)
+library(dygraphs)
+
 
 wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
 tz="Etc/GMT-1" ## check on geotop.inpts
@@ -71,11 +73,48 @@ meteo <- meteo %>% st_transform(crs=4326)
 ##
 
 
-# bbox <- st_bbox(meteo)
-# west <- bbox$xmin
-# south <- bbox$ymin
-# east <- bbox$xmax
-# north <- bbox$ymax
-# outleaf <- leaflet() %>% addProviderTiles(basemaps[1])  %>% fitBounds(west, south, east, north) 
-# 
-# 
+bbox <- st_bbox(meteo)
+west <- bbox$xmin %>% as.numeric()
+south <- bbox$ymin %>% as.numeric()
+east <- bbox$xmax %>% as.numeric()
+north <- bbox$ymax %>% as.numeric()
+ 
+## METEO HEADER 
+nDate <- get.geotop.inpts.keyword.value("HeaderDateDDMMYYYYhhmmMeteo",wpath=wpath)
+if(is.null(nDate)) nDate <- "Date"
+#    HeaderDateDDMMYYYYhhmmMeteo="Date"
+
+
+
+#    HeaderIPrec="N"
+nIPrec <- get.geotop.inpts.keyword.value("HeaderIPrec",wpath=wpath)
+if(is.null(nIPrec)) nIPrec <- "IPrec"
+
+
+#    HeaderWindVelocity="WG"
+nWindVelocity <- get.geotop.inpts.keyword.value("HeaderWindVelocity",wpath=wpath)
+if(is.null(nWindVelocity)) nWindVelocity <- "WindVelocity"
+
+
+#    HeaderWindDirection="WR"
+nWindDirection <- get.geotop.inpts.keyword.value("HeaderWindDirection",wpath=wpath)
+if(is.null(nWindDirection)) nWindDirection <- "WindDirection"
+
+#    HeaderRH="LF"
+nRH <- get.geotop.inpts.keyword.value("HeaderRH",wpath=wpath)
+if(is.null(nRH)) nRH <- "RH"
+
+#    HeaderAirTemp="LT"
+nAirTemp <- get.geotop.inpts.keyword.value("HeaderAirTemp",wpath=wpath)
+if(is.null(nAirTemp)) nAirTemp <- "AirTemp"
+
+#    HeaderSWglobal="GS"
+nSWglobal <- get.geotop.inpts.keyword.value("HeaderSWglobal",wpath=wpath)
+if(is.null(nSWglobal)) nSWglobal <- "nSWglobal"
+
+
+#    HeaderCloudSWTransmissivity="CloudTrans"
+nCloudTrans <- get.geotop.inpts.keyword.value("HeaderCloudSWTransmissivity",wpath=wpath)
+if(is.null(nCloudTrans)) nCloudTrans <- "nCloudTrans"
+
+nMeteoVars <- c(nIPrec,nAirTemp,nRH,nWindVelocity,nWindDirection,nSWglobal,nCloudTrans)
