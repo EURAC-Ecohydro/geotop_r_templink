@@ -158,13 +158,14 @@ function(input, output, session) {
     outleaf <-  map <- leafletProxy("map2") %>% clearPopups() %>% addPopups(data=meteo_clicked,popup=popup) ###lng=coords0$lng,lat=coords0$lat
     outleaf
     ###
-    meteodf <<- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
-                                            level=level,start_date=input$time0,end_date=input$time,date_field = nDate,tz=tz)
-    time_ <- index(meteodf)
-    meteodf <- as.data.table(meteodf)
-    meteodf$time <- time_
-    meteodf <- meteodf[,c(time,nMeteoVars)]
-    dd <- dygraph(meteodf,main=main,ylab="TO DO") %>% dyRangeSelector()
+    ## 202311
+    #meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
+    #                                        level=level,start_date=input$time0,end_date=input$time,date_field = nDate,tz=tz)
+    #time_ <- index(meteodf)
+    #meteodf <- as.data.table(meteodf)
+    #meteodf$time <- time_
+    #meteodf <- meteodf[,c(time,nMeteoVars)]
+    #dd <- dygraph(meteodf,main=main,ylab="TO DO") %>% dyRangeSelector()
     
     
 #    output$
@@ -179,7 +180,7 @@ function(input, output, session) {
     ##
     ## Let's change names accortding with Header* keywords? 
     
-    str(meteodf)
+ #   str(meteodf)
     ###
    
     
