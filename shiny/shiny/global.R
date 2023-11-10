@@ -35,6 +35,8 @@ val_psi <- seq(from=-100*10^3,to=100*10^3,by=100)
 pal_psi <- colorNumeric("YlGnBu",val_psi,na.color="#00000000")   ### YlGnBu RdYlBu
 val_temp <- seq(from=-40,to=40,by=5)
 pal_temp <- colorNumeric("RdYlBu",val_temp,reverse=TRUE,na.color="#00000000") 
+val_snow <- seq(from=0,to=4000,by=10)
+pal_snow <- colorNumeric("RdYlBu",val_snow,reverse=FALSE,na.color="#00000000") 
 ###__###
 
 
@@ -49,8 +51,36 @@ variables  <- list(
   Solid_Soil_Water_content=list(brickFromOutputSoil3DTensor=list(x="SoilIceContentTensorFile",one.layer=FALSE,timestep = "OutputSoilMaps"),addLegend=list(pal=pal_theta,values=val_theta)),
   Total_Soil_Water_pressure=list(brickFromOutputSoil3DTensor=list(x="SoilTotWaterPressTensorFile",one.layer=FALSE,timestep = "OutputSoilMaps"), addLegend=list(pal=pal_psi,values=val_psi)),  
  ## Liquid_Soil_Water_pressure=list(brickFromOutputSoil3DTensor=list(x="SoilLiqWaterPressTensorFile",one.layer=FALSE,timestep = "OutputSoilMaps"),addLegend=list(pal=pal_psi,values=val_psi)),   ##) ##= 
-  Soil_Averaged_Temperature=list(brickFromOutputSoil3DTensor=list(x="SoilAveragedTempTensorFile",one.layer=FALSE,timestep = "OutputSoilMaps"),addLegend=list(pal=pal_temp,values=val_temp))
+  Soil_Averaged_Temperature=list(brickFromOutputSoil3DTensor=list(x="SoilAveragedTempTensorFile",one.layer=FALSE,timestep = "OutputSoilMaps"),addLegend=list(pal=pal_temp,values=val_temp)),
   
+ 
+ ## TO DO 
+ 
+ # ! SNOW
+  SWEMapFile=list(brickFromOutputSoil3DTensor=list(x="SWEMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow)), ####= "output-maps/SWE"
+  SnowDepthMapFile=list(brickFromOutputSoil3DTensor=list(x="SnowDepthMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow)), #########=list(x="SnowDepthMapFile,one.layer=TRUE,timestep="OutputSnowMaps")  ###### = "output-maps/snowdepth"
+  SnowMeltedMapFile=list(brickFromOutputSoil3DTensor=list(x="SnowMeltedMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow))#############  #SnowMeltedMapFile=list(x="SnowMeltedMapFile= "output-maps/snowmelt"
+ # 
+ # ! SURFACE
+ # NetShortwaveRadiationMapFile = "output-maps/SWnet"
+ # InShortwaveRadiationMapFile= "output-maps/SWin"
+ # NetLongwaveRadiationMapFile = "output-maps/LWnet"
+ # InLongwaveRadiationMapFile= "output-maps/LWin"
+ # NetRadiationMapFile= "output-maps/RadNet"
+ # SurfaceHeatFluxMapFile = "output-maps/EB"
+ # SurfaceSensibleHeatFluxMapFile = "output-maps/H"
+ # SurfaceLatentHeatFluxMapFile = "output-maps/LE"
+ # EvapotranspirationFromSoilMapFile = "output-maps/ET"
+ # 
+ # 
+ # ! METEO
+ # PrecipitationMapFile = "output-maps/Prec"
+ # NetPrecipitationFile = "output-maps/Pnet"
+ # AirTempMapFile = "output-maps/Ta"
+ 
+ 
+ 
+ 
 )
 
 variable_default <- "Total_Soil_Water_pressure"

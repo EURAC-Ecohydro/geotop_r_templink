@@ -94,12 +94,17 @@ function(input, output, session) {
    ## print(args_legend$pal)
     print("ba")
     args_legend$layerId <- "legend"
+    if (args$one.layer==TRUE) { 
+      input_layer <- 1 
+    } else {
+      input_layer <- as.numeric(input$layer)
+    }  
     outleaf <- outleaf %>% removeControl(layerId=args_legend$layerId) %>% removeControl(layerId="meteostations")
-    outleaf <- outleaf %>% addRasterImage(outvar[[as.numeric(input$layer)]],opacity=0.7,colors=args_legend$pal,method="ngb")
+    outleaf <- outleaf %>% addRasterImage(outvar[[input_layer]],opacity=0.7,colors=args_legend$pal,method="ngb")
     args_legend$map <- outleaf
  
     if (is.null(args_legend$title)) {
-      args_legend$title <- paste(input$variable,names(outvar)[as.numeric(input$layer)],sep="_")
+      args_legend$title <- paste(input$variable,names(outvar)[input_layer],sep="_")
     }  
     print("HERE!4533@#")
     print(2)
@@ -302,7 +307,7 @@ background_map <- reactive({
    isolate({
      outleaf <- outleaf %>% fitBounds(west, south, east, north) 
      outleaf <- outleaf %>% addProviderTiles(input$basemap) 
- ##    outleaf <- outleaf %>% addRasterImage(outvar[[as.numeric(input$layer)]],opacity=0.7,colors=args_legend$pal,method="ngb",layerId="raster0") ## ADDED
+
      outleaf
      
      #### GET meteo data 
