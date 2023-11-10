@@ -52,7 +52,11 @@ ui <- fluidPage(
   column(8,
       tabsetPanel(
         tabPanel("Results", leafletOutput("map2")),
-        tabPanel("Weather_Forcings", leafletOutput("map3"),height = 800), ##DT::dataTableOutput("mytable2")),
+        tabPanel("Weather_Forcings",
+          dygraphOutput("dd_prec_temp"),
+          dygraphOutput("dd_sw_global_rh") ,  
+          dygraphOutput("dd_wind")                               
+         ) ,   
         tabPanel("Tab 2",tableOutput("meteo_station_table"))
       )
     )

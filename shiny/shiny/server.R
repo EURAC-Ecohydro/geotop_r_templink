@@ -23,7 +23,7 @@ source('./global.R')
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
- # output$map3 <- renderLeaflet({leaflet() %>% addProviderTiles(input$basemap)})
+
   output$meteo_station_table <- renderTable({
     if (input$meteo) {
       print(meteo)
@@ -33,30 +33,18 @@ function(input, output, session) {
     }  
     })
   
- ## output$map2 <- renderLeaflet({geotop_map()})
+
   output$map2 <- renderLeaflet({ 
     outleaf <- leaflet() %>% addProviderTiles(input$basemap) 
     outleaf %>% fitBounds(west, south, east, north) 
   ##setView((east+west)/2,(north+south)/2,zoom=7)
   ##fitBounds(west, south, east, north) 
   })
-  # init_map <- reactive({
-  #   #isolate(outleaf)
-  #   #isolate(leaflet() %>% addProviderTiles(input$basemap))
-  #   # print("arr")
-  #   # print(basemaps)
-  #   # bbox <- st_bbox(meteo)
-  #   # west <- bbox$xmin
-  #   # south <- bbox$ymin
-  #   # east <- bbox$xmax
-  #   # north <- bbox$ymax
-  #   #outleaf %>% addProviderTiles(input$basemap) %%>fitBounds(west, south, east, north) 
-  #   # 
-  #   leaflet() %>% addProviderTiles(input$basemap) %>% fitBounds(west, south, east, north) 
-  #   })
   
-  
-  
+  # for (nMeteoVar in nMeteoVars) {
+  #   print("here33")
+  #   output[[paste0("dd",nMeteoVar)]] <- renderDygraph({NULL})
+  # }
   geotop_map <- reactive({ 
     fun_name <- "brickFromOutputSoil3DTensor"
     print(input$variable)
@@ -114,31 +102,31 @@ function(input, output, session) {
       args_legend$title <- paste(input$variable,names(outvar)[as.numeric(input$layer)],sep="_")
     }  
     print("HERE!4533@#")
-
+    print(2)
     args_legend <<- args_legend
    ##outleaf <- outleaf %>% do.call(what=addLegend,args=args_legend)
-    outleaf <-  do.call(what=addLegend,args=args_legend)
+    outleaf <-  do.call(what="addLegend",args=args_legend)
     print("HERE!33@#")
     print(input$meteo)
     if (input$meteo) {
       
-  #    meteo <- get.geotop.points(prefix="MeteoStation",suffix=c("Code","Name_DE","Name_IT","Elevation"),wpath=wpath)
-   #   meteo <- meteo %>% st_transform(crs=4326)
-      ## meteo_v <- c(st_coordinates(meteo)as.data.frame(meteo))
-      meteov <<- meteo
+  ###    meteov <<- meteo
       outleaf <- outleaf %>% addMarkers(data=meteo,layerId=paste0("meteo_",meteo$MeteoStationCode))
     }  else for (itm in paste0("meteo_",meteo$MeteoStationCode)) {
       print(itm)
       outleaf <- outleaf %>% removeMarker(layerId=itm)
     }
-    
+    print("na")
     outleaf 
    
     
   })
 
-   
-  weather_station_click <- reactive ({
+  output$dd_prec_temp <- renderDygraph({weather_station_precipitation_temperature()}) 
+  output$dd_sw_global_rh <- renderDygraph({weather_station_sw_global_cluod_rh()})
+  output$dd_wind <- renderDygraph({weather_station_wind()})
+  
+weather_station_click <- reactive ({
     
     ## TO DO
     event <- input$map2_marker_click
@@ -151,47 +139,158 @@ function(input, output, session) {
     ##  isolate({
     id <- event$id
     level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
-    meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",meteo$MeteoStationCode)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
+    meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
     ##coord <- st_coordinates(meteo_clicked)
     
     popup <- paste(paste(names(meteo_clicked),meteo_clicked,sep=" : "),collapse="; ")
     outleaf <-  map <- leafletProxy("map2") %>% clearPopups() %>% addPopups(data=meteo_clicked,popup=popup) ###lng=coords0$lng,lat=coords0$lat
     outleaf
-    ###
-    ## 202311
-    #meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
-    #                                        level=level,start_date=input$time0,end_date=input$time,date_field = nDate,tz=tz)
-    #time_ <- index(meteodf)
-    #meteodf <- as.data.table(meteodf)
-    #meteodf$time <- time_
-    #meteodf <- meteodf[,c(time,nMeteoVars)]
-    #dd <- dygraph(meteodf,main=main,ylab="TO DO") %>% dyRangeSelector()
+   #  ###
+   #  ## 202311
+   #  if (is.null(level)) level <- 5
+   #  meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
+   #                                          level=level,start_date=input$time0,end_date=input$time,date_field = nDate,tz=tz)
+   # #meteodf <- meteodf0
+   # #  meteodf <- as.data.frame(meteodf)
+   # #  meteodf$time <- time_
+   #  #meteodf <- meteodf[,c("time",nMeteoVars)] %>% as.data.table()
+   #  dd <- list()
+   #  for (nMeteoVar in nMeteoVars) {
+   #    main <- sprintf("Variable %s vs time at %s/%s (%s) Elevation %s m ",nMeteoVar,
+   #                    meteo_clicked$MeteoStationName_DE,meteo_clicked$MeteoStationName_IT,
+   #                    meteo_clicked$MeteoStationCode,as.character(meteo_clicked$MeteoStationElevation))
+   #    print(main)
+   #    print(nMeteoVar)
+   #    dd[[nMeteoVar]]  <- dygraph(meteodf[,nMeteoVar],main=main,ylab=nMeteoVar) %>% dyRangeSelector()
+   #    output[[paste0("dd",nMeteoVar)]] <- renderDygraph(dd[[nMeteoVar]])
+  #  }
+   ####
+     
     
     
-#    output$
-#    HeaderDateDDMMYYYYhhmmMeteo="Date"
-#    HeaderIPrec="N"
-#    HeaderWindVelocity="WG"
-#    HeaderWindDirection="WR"
-#    HeaderRH="LF"
-#    HeaderAirTemp="LT"
-#    HeaderSWglobal="GS"
-#    HeaderCloudSWTransmissivity="CloudTrans"
-    ##
-    ## Let's change names accortding with Header* keywords? 
     
- #   str(meteodf)
-    ###
+    
+    
    
     
-    
-    ###
-    
-    
   })
-##}
+weather_station_precipitation_temperature <- reactive ({
+  
+  ## TO DO
+  event <- input$map2_marker_click
+  print("a")
+  print(event)
+  print("b")
+  if (is.null(event)) {
+    id <- meteo$MeteoStationCode[5]
+  } else {
+    id <- event$id
+  }
+  level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
+  meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
+  meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
+                                            level=level,start_date=input$time0,
+                                            end_date=input$time,date_field = nDate,
+                                            tz=tz)
+  
+  
+  main <- sprintf("Precipitation Intensity/Air Temperature vs time at %s/%s (%s) Elevation %s m ",   meteo_clicked$MeteoStationName_DE,meteo_clicked$MeteoStationName_IT,
+                  meteo_clicked$MeteoStationCode,as.character(meteo_clicked$MeteoStationElevation))
+  
+  dd <- dygraph(meteodf[,c(nIPrec,nAirTemp)],main=main,ylab=nIPrec) %>% 
+    dySeries(nIPrec,label="IPrec",stepPlot=TRUE,fillGraph=TRUE,color="blue") %>%  
+    dySeries(nAirTemp, label="AirTemp",axis = 'y2',color="red",) %>%
+    dyAxis(label="Air Temperatiore [deg C]",name="y2") %>% 
+    dyAxis(label="Precipitation Intensity [mm/hr]",name="y") %>% 
+    dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
+  dd
+})
 
-# 
+weather_station_sw_global_cluod_rh <- reactive ({
+  
+  ## TO DO
+  event <- input$map2_marker_click
+  print("a")
+  print(event)
+  print("b")
+  if (is.null(event)) {
+    id <- meteo$MeteoStationCode[5]
+  } else {
+    id <- event$id
+  }
+  level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
+  meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
+  meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
+                                            level=level,start_date=input$time0,
+                                            end_date=input$time,date_field = nDate,
+                                            tz=tz)
+  
+  
+  ##  SOLAR RADIATION , CLOUDTRANS AND RH
+  meteodf[,nRH] <-  meteodf[,nRH]/100
+  
+  main <- sprintf("Global Short-Wave Radiation / CloudTrans / RH vs time at %s/%s (%s) Elevation %s m ",   meteo_clicked$MeteoStationName_DE,meteo_clicked$MeteoStationName_IT,
+                  meteo_clicked$MeteoStationCode,as.character(meteo_clicked$MeteoStationElevation))
+  
+  dd <- dygraph(meteodf[,c(nRH,nSWglobal,nCloudTrans)],main=main,ylab=nSWglobal) %>% 
+    dySeries(nSWglobal,stepPlot=FALSE,fillGraph=TRUE,color="#feb24c",axis="y",label="SWglobal") %>%  
+    dySeries(nRH, axis = 'y2',color="#2b8cbe",label="RH") %>%  dySeries(nCloudTrans, axis = 'y2',color="#756bb1",label="CloudTRans") %>%
+    dyAxis(label="RH/CloudTRans [-]",name="y2") %>% 
+    dyAxis(label="SW Radiation Intensity [W/m^2]",name="y") %>% 
+    dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
+  
+  dd
+})
+  
+weather_station_wind <- reactive ({
+  
+  ## TO DO
+  event <- input$map2_marker_click
+  print("a")
+  print(event)
+  print("b")
+  if (is.null(event)) {
+    id <- meteo$MeteoStationCode[5]
+  } else {
+    id <- event$id
+  }
+  level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
+  meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
+  meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
+                                            level=level,start_date=input$time0,
+                                            end_date=input$time,date_field = nDate,
+                                            tz=tz)
+  
+  
+  ## PRECIPITATION SOLAR RADIATION , CLOUDTRANS AND RH
+  
+  main <- sprintf("Wind Speed / Direction  vs time at %s/%s (%s) Elevation %s m ",   meteo_clicked$MeteoStationName_DE,meteo_clicked$MeteoStationName_IT,
+                  meteo_clicked$MeteoStationCode,as.character(meteo_clicked$MeteoStationElevation))
+  
+  
+  #x <- (0:360)/360*(2*pi)
+  #plot(x,sin(x),type="l")
+  #plot(x,asin(sin(x)),type="l")
+  #is_north <- (cos(x)>0)
+  
+  xtheta <- meteodf[,nWindDirection]/360*(2*pi)
+  meteodf$WindAngle <- asin(sin(xtheta))/(2*pi)*360
+  meteodf$WindNorth <- 90
+  meteodf$WindNorth[cos(xtheta)<0] <- -90
+  
+  dd <- dygraph(meteodf[,c(nWindVelocity,"WindAngle","WindNorth")],main=main,ylab=nWindVelocity) %>% 
+    dySeries(nWindVelocity,label="WindSp",axis = 'y',color="blue") %>%  
+    dySeries("WindAngle",label="WindDir", axis = 'y2',color="green")  %>% 
+    dyShadow("WindNorth",axis="y2",label="North/South") %>%
+    dyAxis(label="North/South Angle  [deg Easting]",name="y2") %>% 
+    dyAxis(label="speed [m/s]",name="y") %>% 
+    dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
+  
+  dd
+}) 
+  
+  
+  
 background_map <- reactive({
    north <- input$map2_bounds$north
    south <- input$map2_bounds$south

@@ -19,7 +19,7 @@ library(sf)
 library(data.table)
 library(dplyr)
 library(dygraphs)
-
+library(zoo)
 
 wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
 tz="Etc/GMT-1" ## check on geotop.inpts
