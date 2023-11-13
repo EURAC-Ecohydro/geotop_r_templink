@@ -35,8 +35,12 @@ val_psi <- seq(from=-100*10^3,to=100*10^3,by=100)
 pal_psi <- colorNumeric("YlGnBu",val_psi,na.color="#00000000")   ### YlGnBu RdYlBu
 val_temp <- seq(from=-40,to=40,by=5)
 pal_temp <- colorNumeric("RdYlBu",val_temp,reverse=TRUE,na.color="#00000000") 
-val_snow <- seq(from=0,to=4000,by=10)
+val_snow <- seq(from=0,to=1000,by=10)
 pal_snow <- colorNumeric("RdYlBu",val_snow,reverse=FALSE,na.color="#00000000") 
+val_rad <- seq(from=0,to=4000,by=10)
+pal_rad <- colorNumeric("RdYlBu",val_rad,reverse=TRUE,na.color="#00000000") 
+val_iprec <- seq(from=0,to=200,by=10)
+pal_iprec <- colorNumeric("YlGnBu",val_iprec,na.color="#00000000") 
 ###__###
 
 
@@ -59,7 +63,7 @@ variables  <- list(
  # ! SNOW
   SWEMapFile=list(brickFromOutputSoil3DTensor=list(x="SWEMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow)), ####= "output-maps/SWE"
   SnowDepthMapFile=list(brickFromOutputSoil3DTensor=list(x="SnowDepthMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow)), #########=list(x="SnowDepthMapFile,one.layer=TRUE,timestep="OutputSnowMaps")  ###### = "output-maps/snowdepth"
-  SnowMeltedMapFile=list(brickFromOutputSoil3DTensor=list(x="SnowMeltedMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow))#############  #SnowMeltedMapFile=list(x="SnowMeltedMapFile= "output-maps/snowmelt"
+  SnowMeltedMapFile=list(brickFromOutputSoil3DTensor=list(x="SnowMeltedMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow)), #############  #SnowMeltedMapFile=list(x="SnowMeltedMapFile= "output-maps/snowmelt"
  # 
  # ! SURFACE
  # NetShortwaveRadiationMapFile = "output-maps/SWnet"
@@ -67,6 +71,15 @@ variables  <- list(
  # NetLongwaveRadiationMapFile = "output-maps/LWnet"
  # InLongwaveRadiationMapFile= "output-maps/LWin"
  # NetRadiationMapFile= "output-maps/RadNet"
+ 
+ 
+  ## TO DO :
+ # NetShortwaveRadiationMapFile=list(brickFromOutputSoil3DTensor=list(x="NetShortwaveRadiationMapFile",one.layer=TRUE,timestep=24),addLegend=list(pal=pal_rad,values=val_rad))
+ 
+ 
+ 
+ 
+ ###
  # SurfaceHeatFluxMapFile = "output-maps/EB"
  # SurfaceSensibleHeatFluxMapFile = "output-maps/H"
  # SurfaceLatentHeatFluxMapFile = "output-maps/LE"
@@ -77,8 +90,13 @@ variables  <- list(
  # PrecipitationMapFile = "output-maps/Prec"
  # NetPrecipitationFile = "output-maps/Pnet"
  # AirTempMapFile = "output-maps/Ta"
+ ##OutputMeteoMaps
+ AirTempMapFile=list(brickFromOutputSoil3DTensor=list(x="AirTempMapFile",one.layer=TRUE,timestep="OutputMeteoMaps"),addLegend=list(pal=pal_temp,values=val_temp)),
+ NetPrecipitationFile=list(brickFromOutputSoil3DTensor=list(x="NetPrecipitationFile",one.layer=TRUE,timestep="OutputMeteoMaps"),addLegend=list(pal=pal_iprec,values=val_iprec)),
+ PrecipitationMapFileTOTAL=list(brickFromOutputSoil3DTensor=list(x="PrecipitationMapFile",secondary.suffix="TOTAL",one.layer=TRUE,timestep="OutputMeteoMaps"),addLegend=list(pal=pal_iprec,values=val_iprec)),
+ PrecipitationMapFileSNOW=list(brickFromOutputSoil3DTensor=list(x="PrecipitationMapFile",secondary.suffix="SNOW",one.layer=TRUE,timestep="OutputMeteoMaps"),addLegend=list(pal=pal_iprec,values=val_iprec))
  
- 
+### SnowMeltedMapFile=list(brickFromOutputSoil3DTensor=list(x="SnowMeltedMapFile",one.layer=TRUE,timestep="OutputSnowMaps"),addLegend=list(pal=pal_snow,values=val_snow))
  
  
 )
