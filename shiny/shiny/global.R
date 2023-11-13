@@ -41,9 +41,15 @@ val_rad <- seq(from=0,to=4000,by=10)
 pal_rad <- colorNumeric("RdYlBu",val_rad,reverse=TRUE,na.color="#00000000") 
 val_iprec <- seq(from=0,to=200,by=10)
 pal_iprec <- colorNumeric("YlGnBu",val_iprec,na.color="#00000000") 
-###__###
+###__###  BuGn
+val_et <- seq(from=0,to=50,by=10)
+pal_et <- colorNumeric("BuGn",val_et,na.color="#00000000")
 
 
+
+###############
+###############
+###############
 ## Variable keywords
 variables  <- list(
   ##!SOIL
@@ -85,10 +91,12 @@ variables  <- list(
  # SurfaceLatentHeatFluxMapFile = "output-maps/LE"
  # EvapotranspirationFromSoilMapFile = "output-maps/ET"
  # 
- # 
+ 
+ EvapotranspirationFromSoilMapFile=list(brickFromOutputSoil3DTensor=list(x="EvapotranspirationFromSoilMapFile",one.layer=TRUE,timestep="OutputMeteoMaps"),addLegend=list(pal=pal_et,values=val_et)),
+ 
  # ! METEO
  # PrecipitationMapFile = "output-maps/Prec"
- # NetPrecipitationFile = "output-maps/Pnet"
+ # NetPrecipitationFile = "output-maps/Pnet" MISSING ? 
  # AirTempMapFile = "output-maps/Ta"
  ##OutputMeteoMaps
  AirTempMapFile=list(brickFromOutputSoil3DTensor=list(x="AirTempMapFile",one.layer=TRUE,timestep="OutputMeteoMaps"),addLegend=list(pal=pal_temp,values=val_temp)),
@@ -107,18 +115,11 @@ time_default <- start+seconds(as.numeric(end-start,unit="secs")*0.8)
 time0_default <- start+seconds(as.numeric(end-start,unit="secs")*0.15)
 basemaps <- c("OpenTopoMap","Esri.WorldImagery")
 
-
-meteo <- get.geotop.points(prefix="MeteoStation",suffix=c("Code","Name_DE","Name_IT","Elevation"),wpath=wpath)
-meteo <- meteo %>% st_transform(crs=4326)
 ### WEATHER STATIONS
+meteo <- get.geotop.points(prefix="MeteoStation",suffixes=c("Code","Name_DE","Name_IT","Elevation"),wpath=wpath)
+meteo <- meteo %>% st_transform(crs=4326)
 
 
-## Reactive values
-
-
-# ## boolean option It is 1 when App is launching, it becomes FALSE during its execution. 
-### LEAFLET INITALIZATION 
-##
 
 
 bbox <- st_bbox(meteo)
@@ -166,3 +167,9 @@ nCloudTrans <- get.geotop.inpts.keyword.value("HeaderCloudSWTransmissivity",wpat
 if(is.null(nCloudTrans)) nCloudTrans <- "nCloudTrans"
 
 nMeteoVars <- c(nIPrec,nAirTemp,nRH,nWindVelocity,nWindDirection,nSWglobal,nCloudTrans)
+
+
+## CHECK POINTS
+checkpoints <- get.geotop.points(prefix="CoordinatePoint",suffixes=c("ID","Name"),wpath=wpath)
+checkpoints$ID <- as.numeric(checkpoints$CoordinatePointID)
+checkpoints <- checkpoints %>% st_transform(crs=4326)

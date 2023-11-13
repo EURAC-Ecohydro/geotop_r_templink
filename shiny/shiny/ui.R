@@ -33,7 +33,8 @@ ui <- fluidPage(
                     min = start, max = end, value = time_default, step = 0.2),
         sliderInput("time0", label = "time0:",
                     min = start, max = end, value = time0_default, step = 0.2),
-        checkboxInput("meteo","Weather Stations",value=FALSE)
+        checkboxInput("meteo","Weather Stations",value=FALSE),
+        checkboxInput("checkpoints","Control Points",value=FALSE)
       )
       # conditionalPanel(
       #   'input.dataset === "Weather_Forcings"',

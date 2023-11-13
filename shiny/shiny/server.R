@@ -116,12 +116,23 @@ function(input, output, session) {
     if (input$meteo) {
       
   ###    meteov <<- meteo
-      outleaf <- outleaf %>% addMarkers(data=meteo,layerId=paste0("meteo_",meteo$MeteoStationCode))
+      outleaf <- outleaf %>% addMarkers(data=meteo,layerId=paste0("meteo_",meteo$MeteoStationCode),icon=icons("icons/meteorology.png",iconWidth=30)) 
     }  else for (itm in paste0("meteo_",meteo$MeteoStationCode)) {
       print(itm)
       outleaf <- outleaf %>% removeMarker(layerId=itm)
     }
-    print("na")
+    
+    
+    
+    print(input$checkpoints)
+    if (input$checkpoints) {
+     
+      ###    meteov <<- meteo
+      outleaf <- outleaf %>% addMarkers(data=checkpoints,layerId=sprintf("check%03d",checkpoints$ID))
+    } else for (itm in sprintf("check%03d",checkpoints$ID)) {
+      print(itm)
+      outleaf <- outleaf %>% removeMarker(layerId=itm)
+    }
     outleaf 
    
     
@@ -339,5 +350,6 @@ observeEvent(input$variable,{geotop_map()})
 observeEvent(input$time,{geotop_map()})
 observeEvent(input$layer,{geotop_map()})
 observeEvent(input$meteo,{geotop_map()})
+observeEvent(input$checkpoints,{geotop_map()})
 observeEvent(input$map2_marker_click,{weather_station_click()})
 }
