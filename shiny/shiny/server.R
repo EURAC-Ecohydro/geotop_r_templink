@@ -128,7 +128,7 @@ function(input, output, session) {
     if (input$checkpoints) {
      
       ###    meteov <<- meteo
-      outleaf <- outleaf %>% addMarkers(data=checkpoints,layerId=sprintf("check%03d",checkpoints$ID))
+      outleaf <- outleaf %>% addMarkers(data=checkpoints,layerId=sprintf("check%03d",checkpoints$ID),icon=icons("icons/line-chart.png",iconWidth=30)) 
     } else for (itm in sprintf("check%03d",checkpoints$ID)) {
       print(itm)
       outleaf <- outleaf %>% removeMarker(layerId=itm)
@@ -141,7 +141,8 @@ function(input, output, session) {
   output$dd_prec_temp <- renderDygraph({weather_station_precipitation_temperature()}) 
   output$dd_sw_global_rh <- renderDygraph({weather_station_sw_global_cluod_rh()})
   output$dd_wind <- renderDygraph({weather_station_wind()})
-  
+  output$dd_discharge <- renderDygraph({discharge_plot()})
+  output$dd_basin <- renderDygraph({basin_plot()})
 weather_station_click <- reactive ({
     
     ## TO DO
@@ -151,13 +152,17 @@ weather_station_click <- reactive ({
     print("b")
     if (is.null(event))
       return()
-    
+
     ##  isolate({
     id <- event$id
+   
+    
     level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
+    if (length(level)>0) idmeteo <<- paste0("meteo_",meteo$MeteoStationCode[level]) ##GLOBAL ASSIGNEMT
+    
     meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
     ##coord <- st_coordinates(meteo_clicked)
-    
+   
     popup <- paste(paste(names(meteo_clicked),meteo_clicked,sep=" : "),collapse="; ")
     outleaf <-  map <- leafletProxy("map2") %>% clearPopups() %>% addPopups(data=meteo_clicked,popup=popup) ###lng=coords0$lng,lat=coords0$lat
     outleaf
@@ -201,7 +206,9 @@ weather_station_precipitation_temperature <- reactive ({
     id <- meteo$MeteoStationCode[5]
   } else {
     id <- event$id
-  }
+  } 
+  if (!str_detect(id,"meteo")) id <- idmeteo
+  print(id)
   level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
   meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
   meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
@@ -234,6 +241,7 @@ weather_station_sw_global_cluod_rh <- reactive ({
   } else {
     id <- event$id
   }
+  if (!str_detect(id,"meteo")) id <- idmeteo
   level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
   meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
   meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
@@ -270,6 +278,7 @@ weather_station_wind <- reactive ({
   } else {
     id <- event$id
   }
+  if (!str_detect(id,"meteo")) id <- idmeteo
   level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
   meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
   meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
@@ -342,6 +351,29 @@ background_map <- reactive({
  })
 # 
 # 
+
+discharge_plot <- reactive({
+  discharge_data <- get.geotop.inpts.keyword.value(discharge_keyword,date_field=date_field_discharge,wpath=wpath,data.frame=TRUE,start_date=input$time0,
+                                                   end_date=input$time,level=1,tz=tz,formatter = "") ## only one file
+  discharge_data <- discharge_data[,input$discharge_variables]
+  dd <- dygraph(discharge_data,ylab="Variables",main="Discharge variable vs Time") %>% 
+    dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
+  
+  dd
+  
+})
+basin_plot <- reactive({
+  basin_data <- get.geotop.inpts.keyword.value(basin_keyword,date_field=date_field_basin,wpath=wpath,data.frame=TRUE,start_date=input$time0,
+                                                   end_date=input$time,level=1,tz=tz,formatter="") ## only one file
+ str(basin_data)
+ str(input$basin_variables)
+   discharge_data <- basin_data[,input$basin_variables]
+  dd <- dygraph(discharge_data,ylab="Variables",main="Basin variable vs Time") %>% 
+    dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
+  
+  dd
+  
+})
 observeEvent(input$basemap,{
  geotop_map()
   ##background_map()
@@ -352,4 +384,5 @@ observeEvent(input$layer,{geotop_map()})
 observeEvent(input$meteo,{geotop_map()})
 observeEvent(input$checkpoints,{geotop_map()})
 observeEvent(input$map2_marker_click,{weather_station_click()})
+##observeEvent(input$map2_marker_click,{discharge_plot()})
 }

@@ -173,3 +173,50 @@ nMeteoVars <- c(nIPrec,nAirTemp,nRH,nWindVelocity,nWindDirection,nSWglobal,nClou
 checkpoints <- get.geotop.points(prefix="CoordinatePoint",suffixes=c("ID","Name"),wpath=wpath)
 checkpoints$ID <- as.numeric(checkpoints$CoordinatePointID)
 checkpoints <- checkpoints %>% st_transform(crs=4326)
+###
+date_field_ckp <- "Date12.DDMMYYYYhhmm." ## It's a peculiarity of thias simulation.
+checkpoint_data <- get.geotop.inpts.keyword.value("PointOutputFile",date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
+                                        level=1,tz=tz)
+
+### Date12[DDMMYYYYhhmm],JulianDayFromYear0[days],
+###TimeFromStart[days],Simulation_Period,Run,IDpoint,Psnow_over_canopy[mm],
+### Prain_over_canopy[mm],Psnow_under_canopy[mm],Prain_under_canopy[mm],Prain_rain_on_snow[mm],
+###Wind_speed[m/s],Wind_direction[deg],Relative_Humidity[-],Pressure[mbar],Tair[C],Tdew[C],Tsurface[C],
+###Tvegetation[C],Tcanopyair[C],Surface_Energy_balance[W/m2],Soil_heat_flux[W/m2],SWin[W/m2],SWbeam[W/m2],SWdiff[W/m2],
+###LWin[W/m2],LWin_min[W/m2],LWin_max[W/m2],SWnet[W/m2],LWnet[W/m2],H[W/m2],LE[W/m2],Canopy_fraction[-],LSAI[m2/m2],
+###z0veg[m],d0veg[m],Estored_canopy[W/m2],SWv[W/m2],LWv[W/m2],Hv[W/m2],LEv[W/m2],Hg_unveg[W/m2],LEg_unveg[W/m2],
+###Hg_veg[W/m2],LEg_veg[W/m2],Evap_surface[mm],Trasp_canopy[mm],Water_on_canopy[mm],Snow_on_canopy[mm],Qvegetation[-],
+###Qsurface[-],Qair[-],Qcanopyair[-],LObukhov[m],LObukhovcanopy[m],Wind_speed_top_canopy[m/s],Decay_of_K_in_canopy[-],
+####SWup[W/m2],LWup[W/m2],Hup[W/m2],LEup[W/m2],snow_depth[mm],snow_water_equivalent[mm],snow_density[kg/m3],snow_temperature[C],
+####snow_melted[mm],snow_subl[mm],snow_blown_away[mm],snow_subl_while_blown[mm],glac_depth[mm],glac_water_equivalent[mm],glac_density[kg/m3],glac_temperature[C],glac_melted[mm],glac_subl[mm],lowest_thawed_soil_depth[mm],highest_thawed_soil_depth[mm],lowest_water_table_depth[mm],highest_water_table_depth[mm]
+nn_checkpoint_vars <- names(checkpoint_data)
+nn_checkpoint_vars_default <- nn_checkpoint_vars[str_detect(nn_checkpoint_vars,".mm.")]
+# 
+
+## DISCHARGE DATA
+date_field_discharge <- "DATE.day.month.year.hour.min."
+discharge_keyword <- "DischargeFile"
+discharge_data <- get.geotop.inpts.keyword.value(discharge_keyword,date_field=date_field_discharge,wpath=wpath,data.frame=TRUE,
+                                                  level=1,tz=tz,formatter = "") ## only one file
+nn_discharge_vars <- names(discharge_data)
+nn_discharge_vars_default <- nn_discharge_vars[str_detect(nn_discharge_vars,"Q")]
+### BASIN FILE
+date_field_basin <- "Date12.DDMMYYYYhhmm."
+basin_keyword <- "BasinOutputFile"
+basin_data <- get.geotop.inpts.keyword.value(basin_keyword,date_field=date_field_basin,wpath=wpath,data.frame=TRUE,
+                                                 level=1,tz=tz,formatter = "") ## only one file
+nn_basin_vars <- names(basin_data)
+nn_basin_vars_default <- nn_basin_vars[str_detect(nn_basin_vars,".mm.")]
+
+####
+
+# 
+# ! Tabs 
+# DischargeFile = "output-tabs/discharge"
+# 
+# PointOutputFile = "output-tabs/point" 
+# PointAll = 1
+# 
+# BasinOutputFile = "output-tabs/basin" 
+# 
+# 

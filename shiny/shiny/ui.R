@@ -34,7 +34,12 @@ ui <- fluidPage(
         sliderInput("time0", label = "time0:",
                     min = start, max = end, value = time0_default, step = 0.2),
         checkboxInput("meteo","Weather Stations",value=FALSE),
-        checkboxInput("checkpoints","Control Points",value=FALSE)
+        checkboxInput("checkpoints","Control Points",value=FALSE),
+        selectInput('checkpoints_variables', 'Control Points Variables',nn_checkpoint_vars, multiple=TRUE,selectize=TRUE,selected=nn_checkpoint_vars_default),
+        selectInput('discharge_variables', 'Discharge-at-Outlet Variables',nn_discharge_vars, multiple=TRUE,selectize=TRUE,selected=nn_discharge_vars_default),
+        selectInput('basin_variables', 'Basin Variables',nn_basin_vars, multiple=TRUE,selectize=TRUE,selected=nn_basin_vars_default)
+        ## https://gallery.shinyapps.io/017-select-vs-selectize/
+        
       )
       # conditionalPanel(
       #   'input.dataset === "Weather_Forcings"',
@@ -58,7 +63,13 @@ ui <- fluidPage(
           dygraphOutput("dd_sw_global_rh") ,  
           dygraphOutput("dd_wind")                               
          ) ,   
-        tabPanel("Tab 2",tableOutput("meteo_station_table"))
+        tabPanel("Control Point Time Series",tableOutput("meteo_station_table")),
+        tabPanel("Discharge Time Series",dygraphOutput("dd_discharge")),
+        tabPanel("Basin Time Series",dygraphOutput("dd_basin"))
+        ##tabPanel("Discharge Time Series",tableOutput("meteo_station_table"))
+        
+        
+        
       )
     )
   )
