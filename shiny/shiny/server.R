@@ -40,11 +40,7 @@ function(input, output, session) {
   ##setView((east+west)/2,(north+south)/2,zoom=7)
   ##fitBounds(west, south, east, north) 
   })
-  
-  # for (nMeteoVar in nMeteoVars) {
-  #   print("here33")
-  #   output[[paste0("dd",nMeteoVar)]] <- renderDygraph({NULL})
-  # }
+ 
   geotop_map <- reactive({ 
     fun_name <- "brickFromOutputSoil3DTensor"
     print(input$variable)
@@ -142,8 +138,11 @@ function(input, output, session) {
   output$dd_sw_global_rh <- renderDygraph({weather_station_sw_global_cluod_rh()})
   output$dd_wind <- renderDygraph({weather_station_wind()})
   output$dd_discharge <- renderDygraph({discharge_plot()})
+  output$dd_checkpoint <- renderDygraph({checkpoints_timeseries()})
   output$dd_basin <- renderDygraph({basin_plot()})
-weather_station_click <- reactive ({
+  
+  ## WEATHER  STATION AND CHACKPOINTS POPUP CODE
+  marker_click <- reactive ({
     
     ## TO DO
     event <- input$map2_marker_click
@@ -152,50 +151,38 @@ weather_station_click <- reactive ({
     print("b")
     if (is.null(event))
       return()
-
+    
     ##  isolate({
     id <- event$id
-   
     
+    
+    level <- which(sprintf("check%03d",checkpoints$ID)==id)
+    if (length(level)>0) {
+      idcheckp <<- sprintf("check%03d",checkpoints$ID) ##paste0("meteo_",meteo$MeteoStationCode[level]) ##GLOBAL ASSIGNEMT
+      clicked <- checkpoints[level,] 
+      popup <- paste(paste(names(clicked),clicked,sep=" : "),collapse="; ")
+      outleaf <-  map <- leafletProxy("map2") %>% clearPopups() %>% addPopups(data=clicked,popup=popup) ###lng=coords0$lng,lat=coords0$lat
+    } 
     level <- which(paste0("meteo_",meteo$MeteoStationCode)==id)
-    if (length(level)>0) idmeteo <<- paste0("meteo_",meteo$MeteoStationCode[level]) ##GLOBAL ASSIGNEMT
-    
-    meteo_clicked <- meteo[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
-    ##coord <- st_coordinates(meteo_clicked)
-   
-    popup <- paste(paste(names(meteo_clicked),meteo_clicked,sep=" : "),collapse="; ")
-    outleaf <-  map <- leafletProxy("map2") %>% clearPopups() %>% addPopups(data=meteo_clicked,popup=popup) ###lng=coords0$lng,lat=coords0$lat
+    if (length(level)>0) {
+      idmeteo <<- paste0("meteo_",meteo$MeteoStationCode[level]) ##GLOBAL ASSIGNEMT
+      clicked <- meteo[level,] 
+      popup <- paste(paste(names(clicked),clicked,sep=" : "),collapse="; ")
+      outleaf <-  map <- leafletProxy("map2") %>% clearPopups() %>% addPopups(data=clicked,popup=popup) ###lng=coords0$lng,lat=coords0$lat
+      
+      
+    }
     outleaf
-   #  ###
-   #  ## 202311
-   #  if (is.null(level)) level <- 5
-   #  meteodf <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath,data.frame=TRUE,
-   #                                          level=level,start_date=input$time0,end_date=input$time,date_field = nDate,tz=tz)
-   # #meteodf <- meteodf0
-   # #  meteodf <- as.data.frame(meteodf)
-   # #  meteodf$time <- time_
-   #  #meteodf <- meteodf[,c("time",nMeteoVars)] %>% as.data.table()
-   #  dd <- list()
-   #  for (nMeteoVar in nMeteoVars) {
-   #    main <- sprintf("Variable %s vs time at %s/%s (%s) Elevation %s m ",nMeteoVar,
-   #                    meteo_clicked$MeteoStationName_DE,meteo_clicked$MeteoStationName_IT,
-   #                    meteo_clicked$MeteoStationCode,as.character(meteo_clicked$MeteoStationElevation))
-   #    print(main)
-   #    print(nMeteoVar)
-   #    dd[[nMeteoVar]]  <- dygraph(meteodf[,nMeteoVar],main=main,ylab=nMeteoVar) %>% dyRangeSelector()
-   #    output[[paste0("dd",nMeteoVar)]] <- renderDygraph(dd[[nMeteoVar]])
-  #  }
-   ####
-     
     
     
     
     
     
-   
     
   })
-weather_station_precipitation_temperature <- reactive ({
+  
+  # ## WEATHER STATION TIME SERIRES DYNAMIC PLOT 
+  weather_station_precipitation_temperature <- reactive ({
   
   ## TO DO
   event <- input$map2_marker_click
@@ -228,8 +215,7 @@ weather_station_precipitation_temperature <- reactive ({
     dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
   dd
 })
-
-weather_station_sw_global_cluod_rh <- reactive ({
+  weather_station_sw_global_cluod_rh <- reactive ({
   
   ## TO DO
   event <- input$map2_marker_click
@@ -265,8 +251,7 @@ weather_station_sw_global_cluod_rh <- reactive ({
   
   dd
 })
-  
-weather_station_wind <- reactive ({
+  weather_station_wind <- reactive ({
   
   ## TO DO
   event <- input$map2_marker_click
@@ -314,6 +299,36 @@ weather_station_wind <- reactive ({
   dd
 }) 
   
+  
+  # ## CHECK POINT  TIME SERIRES DYNAMIC PLOT 
+  checkpoints_timeseries <- reactive ({
+    
+    ## TO DO
+    event <- input$map2_marker_click
+    print("a")
+    print(event)
+    print("b")
+    if (is.null(event)) {
+      id <- meteo$MeteoStationCode[5]
+    } else {
+      id <- event$id
+    } 
+    
+    if (!(id %in% sprintf("check%03d",checkpoints$ID))) id <<- idcheckp ###########id <- idmeteo !str_detect(id,"meteo")) id <- idmeteo
+    print(id)
+    level <- which(sprintf("check%03d",checkpoints$ID)==id)
+    clicked <- checkpoints[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
+    checkpoint_data <- get.geotop.inpts.keyword.value(checkpoint_key,date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
+                                                      level=level,tz=tz)
+    
+    
+    main <- sprintf("Variables vs time at %s (%s) Elevation TO CALCULATE m ",   clicked$CoordinatePointName,
+                    clicked$CoordinatePointID)
+    
+    dd <- dygraph(checkpoint_data[,input$checkpoints_variables],main=main,ylab="Variable") %>% 
+      dyRangeSelector() 
+    dd
+  })
   
   
 background_map <- reactive({
@@ -383,6 +398,7 @@ observeEvent(input$time,{geotop_map()})
 observeEvent(input$layer,{geotop_map()})
 observeEvent(input$meteo,{geotop_map()})
 observeEvent(input$checkpoints,{geotop_map()})
-observeEvent(input$map2_marker_click,{weather_station_click()})
-##observeEvent(input$map2_marker_click,{discharge_plot()})
+##observeEvent(input$map2_marker_click,{weather_station_click()}) 
+###observeEvent(input$map2_marker_click,{checkpoint_click()}) 
+observeEvent(input$map2_marker_click,{marker_click()}) 
 }

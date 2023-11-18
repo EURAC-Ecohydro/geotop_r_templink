@@ -63,7 +63,7 @@ ui <- fluidPage(
           dygraphOutput("dd_sw_global_rh") ,  
           dygraphOutput("dd_wind")                               
          ) ,   
-        tabPanel("Control Point Time Series",tableOutput("meteo_station_table")),
+        tabPanel("Control Point Time Series",dygraphOutput("dd_checkpoint")),
         tabPanel("Discharge Time Series",dygraphOutput("dd_discharge")),
         tabPanel("Basin Time Series",dygraphOutput("dd_basin"))
         ##tabPanel("Discharge Time Series",tableOutput("meteo_station_table"))

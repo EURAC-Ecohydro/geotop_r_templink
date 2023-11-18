@@ -175,7 +175,8 @@ checkpoints$ID <- as.numeric(checkpoints$CoordinatePointID)
 checkpoints <- checkpoints %>% st_transform(crs=4326)
 ###
 date_field_ckp <- "Date12.DDMMYYYYhhmm." ## It's a peculiarity of thias simulation.
-checkpoint_data <- get.geotop.inpts.keyword.value("PointOutputFile",date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
+checkpoint_key <- "PointOutputFile"
+checkpoint_data <- get.geotop.inpts.keyword.value(checkpoint_key,date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
                                         level=1,tz=tz)
 
 ### Date12[DDMMYYYYhhmm],JulianDayFromYear0[days],
