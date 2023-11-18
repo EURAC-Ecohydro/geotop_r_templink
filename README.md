@@ -3,6 +3,14 @@ GEOtop Hydrological Model (www.geotop.org)  Interface for R Environment: Simulat
 
 Simulations over the Venosta Catchment
 
+Based on 
+
+* geotopbricks (https://CRAN.R-project.org/package=geotopbricks)
+
+* shiny   (https://CRAN.R-project.org/package=shiny)
+
+    
+  
 
 
 ## GEOtop Code 
