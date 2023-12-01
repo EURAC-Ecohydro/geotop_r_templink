@@ -21,7 +21,8 @@ library(dplyr)
 library(dygraphs)
 library(zoo)
 
-wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
+#wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
+wpath <- '/home/ecor/local/geotop_simulations/Venosta_3D_037/'
 tz="Etc/GMT-1" ## check on geotop.inpts
 ###
 start <-  get.geotop.inpts.keyword.value("InitDateDDMMYYYYhhmm",
@@ -177,7 +178,7 @@ checkpoints <- checkpoints %>% st_transform(crs=4326)
 date_field_ckp <- "Date12.DDMMYYYYhhmm." ## It's a peculiarity of thias simulation.
 checkpoint_key <- "PointOutputFile"
 checkpoint_data <- get.geotop.inpts.keyword.value(checkpoint_key,date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
-                                        level=1,tz=tz)
+                                        level=1,tz=tz,ContinuousRecovery = 5)
 
 ### Date12[DDMMYYYYhhmm],JulianDayFromYear0[days],
 ###TimeFromStart[days],Simulation_Period,Run,IDpoint,Psnow_over_canopy[mm],
@@ -221,3 +222,4 @@ nn_basin_vars_default <- nn_basin_vars[str_detect(nn_basin_vars,".mm.")]
 # BasinOutputFile = "output-tabs/basin" 
 # 
 # 
+## ADD ContinuousRecovery

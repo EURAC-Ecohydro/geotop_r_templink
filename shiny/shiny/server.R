@@ -319,7 +319,7 @@ function(input, output, session) {
     level <- which(sprintf("check%03d",checkpoints$ID)==id)
     clicked <- checkpoints[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
     checkpoint_data <- get.geotop.inpts.keyword.value(checkpoint_key,date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
-                                                      level=level,tz=tz)
+                                                      level=level,tz=tz,ContinuousRecovery = 5)
     
     
     main <- sprintf("Variables vs time at %s (%s) Elevation TO CALCULATE m ",   clicked$CoordinatePointName,
@@ -369,7 +369,7 @@ background_map <- reactive({
 
 discharge_plot <- reactive({
   discharge_data <- get.geotop.inpts.keyword.value(discharge_keyword,date_field=date_field_discharge,wpath=wpath,data.frame=TRUE,start_date=input$time0,
-                                                   end_date=input$time,level=1,tz=tz,formatter = "") ## only one file
+                                                   end_date=input$time,level=1,tz=tz,formatter = "",ContinuousRecovery = 5) ## only one file
   discharge_data <- discharge_data[,input$discharge_variables]
   dd <- dygraph(discharge_data,ylab="Variables",main="Discharge variable vs Time") %>% 
     dyRangeSelector() %>% dyOptions(drawGapEdgePoints=FALSE)
@@ -379,7 +379,7 @@ discharge_plot <- reactive({
 })
 basin_plot <- reactive({
   basin_data <- get.geotop.inpts.keyword.value(basin_keyword,date_field=date_field_basin,wpath=wpath,data.frame=TRUE,start_date=input$time0,
-                                                   end_date=input$time,level=1,tz=tz,formatter="") ## only one file
+                                                   end_date=input$time,level=1,tz=tz,formatter="",ContinuousRecovery = 5) ## only one file
  str(basin_data)
  str(input$basin_variables)
    discharge_data <- basin_data[,input$basin_variables]
