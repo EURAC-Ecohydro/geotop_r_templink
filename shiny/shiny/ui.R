@@ -27,6 +27,8 @@ ui <- fluidPage(
         
         selectInput("variable", label = "Variable",
                     choices = names(variables), selected = variable_default,width='100%'),
+        selectInput("variablechkp", label = "Variable (Soil Profiles in Check Points)",
+                    choices = names(variables_profile), selected = variable_profile_default,width='100%'),
         selectInput("layer", label = "layer",
                     choices = 1:5, selected = 1),
         sliderInput("time", label = "time:",
@@ -64,6 +66,7 @@ ui <- fluidPage(
           dygraphOutput("dd_wind")                               
          ) ,   
         tabPanel("Control Point Time Series",dygraphOutput("dd_checkpoint")),
+        tabPanel("Control Point Time Series (soil profiles)",dygraphOutput("dd_checkpoint_profile")),
         tabPanel("Discharge Time Series",dygraphOutput("dd_discharge")),
         tabPanel("Basin Time Series",dygraphOutput("dd_basin"))
         ##tabPanel("Discharge Time Series",tableOutput("meteo_station_table"))

@@ -139,6 +139,7 @@ function(input, output, session) {
   output$dd_wind <- renderDygraph({weather_station_wind()})
   output$dd_discharge <- renderDygraph({discharge_plot()})
   output$dd_checkpoint <- renderDygraph({checkpoints_timeseries()})
+  output$dd_checkpoint_profile <- renderDygraph({checkpoints_timeseries_profile()})
   output$dd_basin <- renderDygraph({basin_plot()})
   
   ## WEATHER  STATION AND CHACKPOINTS POPUP CODE
@@ -329,6 +330,39 @@ function(input, output, session) {
       dyRangeSelector() 
     dd
   })
+  
+  # ## CHECK POINT  TIME SERIRES (SOIL PROFILE) DYNAMIC PLOT 
+  checkpoints_timeseries_profile <- reactive ({
+    
+    ## TO DO
+    event <- input$map2_marker_click
+    print("a")
+    print(event)
+    print("b")
+    if (is.null(event)) {
+      id <- meteo$MeteoStationCode[5]
+    } else {
+      id <- event$id
+    } 
+    
+    if (!(id %in% sprintf("check%03d",checkpoints$ID))) id <<- idcheckp ###########id <- idmeteo !str_detect(id,"meteo")) id <- idmeteo
+    print(id)
+    level <- which(sprintf("check%03d",checkpoints$ID)==id)
+    clicked <- checkpoints[level,] ###meteo[] %>% filter(paste0("meteo_",nMeteovar)==id) ## MeteoStationCode==id) ##all_locs[all_locs$location_code0==id,][1,]
+    checkpoint_profile_key <- variables_profile[[input$variablechkp]]$variable
+    
+    checkpoint_data <- get.geotop.inpts.keyword.value(checkpoint_profile_key,date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
+                                                      level=level,tz=tz,ContinuousRecovery = 5,formatter="%04d",zlayer.formatter="z%04d")
+    
+    
+    main <- sprintf("Variable %s  vs time at %s (%s) Elevation TO CALCULATE m ", input$variablechkp,clicked$CoordinatePointName,
+                    clicked$CoordinatePointID)
+    
+    dd <- dygraph(checkpoint_data,main=main,ylab="Variable") %>% 
+      dyRangeSelector() 
+    dd
+  })
+  
   
   
 background_map <- reactive({

@@ -110,6 +110,7 @@ variables  <- list(
  
 )
 
+variable_default <- "Total_Soil_Water_pressure"
 # ### VARIABLE SOIL PROFILE 
 # SoilTempProfileFile="output-tabs/soiltemp"
 # SoilLiqContentProfileFile = "output-tabs/thetaliq" 
@@ -117,10 +118,14 @@ variables  <- list(
 # SoilIceContentProfileFile = "output-tabs/thetaice" 
 # SoilLiqWaterPressProfileFile = "output-tabs/psiliq"
 # SoilTotWaterPressProfileFile = "output-tabs/psitot"
+variables_profile <- c("SoilTempProfileFile","SoilLiqContentProfileFile","SoilIceContentProfileFile","SoilIceContentProfileFile",
+                      "SoilLiqWaterPressProfileFile", 
+                      "SoilTotWaterPressProfileFile")
 
+names(variables_profile) <- variables_profile
+variables_profile <- lapply(variables_profile,function(x){list(variable=x)})
 
-
-variable_default <- "Total_Soil_Water_pressure"
+variable_profile_default <- names(variables_profile)[1]
 
 time_default <- start+seconds(as.numeric(end-start,unit="secs")*0.8)
 time0_default <- start+seconds(as.numeric(end-start,unit="secs")*0.15)
