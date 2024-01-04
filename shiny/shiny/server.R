@@ -389,6 +389,15 @@ basin_plot <- reactive({
   dd
   
 })
+
+
+
+
+
+
+
+
+
 observeEvent(input$basemap,{
  geotop_map()
   ##background_map()
@@ -402,3 +411,5 @@ observeEvent(input$checkpoints,{geotop_map()})
 ###observeEvent(input$map2_marker_click,{checkpoint_click()}) 
 observeEvent(input$map2_marker_click,{marker_click()}) 
 }
+
+

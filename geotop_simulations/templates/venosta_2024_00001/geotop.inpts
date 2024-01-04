@@ -1,0 +1,436 @@
+! INPUT FOR GEOTOP V3.0
+! Distributed simulation Vinschgau 250X250m sim 
+PointSim = 0
+TimeStepEnergyAndWater = 300
+
+Latitude = 46.61
+Longitude= 10.70
+
+InitDateDDMMYYYYhhmm= 02/09/2019 00:00
+EndDateDDMMYYYYhhmm = 02/09/2020 00:00
+!11/11/2019 00:00
+
+!=======================================
+! GENERAL SETTINGS
+!=======================================
+
+! Catchment centroid (for Sun position) 
+Latitude = 46.61
+Longitude= 10.70
+StandardTimeSimulation	=	1
+
+! Simulation settings
+WaterBalance = 1
+EnergyBalance = 1
+
+! Output timeseries Dt in hours 
+DtPlotDischarge = 1
+DtPlotPoint = 1
+DtPlotBasin = 1
+
+! Output maps Dt in hours 
+OutputSoilMaps = 24
+OutputSurfEBALMaps = 24
+OutputMeteoMaps = 24
+OutputSnowMaps = 24
+OutputGlacierMaps = 24
+
+!=======================================
+! METEO STATIONS
+!=======================================
+! Order of stations: 
+!,ID,ID_PROVINCE,STATION_D,STATION_I,N_UTM,E_UTM,ZONE,LAT,LONG,ELEV_m,TA_C,RH_perc,WV_m_s,WD_deg,P_mm,RS_W_m2
+!,1,20050SF,Timmelsalm,Alpe del Tumulo,5197801,663615,32,11.1486754,46.91357357,2230,1,1,1,1,0,0
+!,2,01080SF,Pratznerberg,Monte Pratzen,5189422,623874,32,10.6247484,46.84680667,2450,1,1,1,1,0,0
+!,3,20720WS,Rauhjoch,Giogo Scabro,5188319,661276,32,11.11462677,46.82887589,2926,1,1,1,1,0,0
+!,4,00390SF,Schoneben,Belpiano,5184760,614326,32,10.49839507,46.80657638,2040,1,1,1,1,0,0
+!,5,20500MS,Pfelders,Plan,5184669,659362,32,11.08827633,46.79651195,1618,1,1,1,1,1,1
+!,6,20690SF,Grunboden,Prati di Plan,5184194,660393,32,11.10161089,46.79199303,2015,1,1,1,1,0,0
+!,7,22210MS,St.Martin in Passeier,S.Martino in Passiria,5183398,670189,32,11.22957458,46.78240704,586,1,1,1,1,1,1
+!,8,15000SF,Teufelsegg,Giovo del Diavolo,5182751,634696,32,10.76466049,46.7847002,3035,1,1,0,0,0,0
+!,9,02200MS,St.Valentin auf der Haide,S.Valentino alla Muta,5181393,616720,32,10.52890217,46.77587224,1499,1,1,1,1,1,1
+!,10,15050WS,Grawand,Croda delle Cornacchie,5181201,637174,32,10.79664483,46.77025338,3220,1,1,1,1,0,0
+!,11,15590SF,Vernagt Finail,Vernago Finail,5178015,639220,32,10.822462,46.74117288,1950,1,1,0,0,0,0
+!,12,15800MS,Vernagt,Vernago,5177450,641283,32,10.84927966,46.73565783,1700,1,1,0,0,1,0
+!,13,02500MS,Marienberg,Monte Maria,5173583,616288,32,10.52126761,46.70568898,1310,1,1,0,0,1,1
+!,14,23200MS,Meran - Gratsch,Merano - Quarazze,5172717,663374,32,11.13656022,46.68805785,330,1,1,1,1,1,1
+!,15,19300MS,Naturns,Naturno,5167937,652371,32,10.99117807,46.64766308,541,1,1,1,1,1,1
+!,16,03100MS,Taufers,Tubre,5165895,611860,32,10.46149465,46.6372804,1235,1,1,1,1,1,1
+!,17,09700MS,Schlanders,Silandro,5164894,636292,32,10.78026983,46.6237546,698,1,1,1,1,1,1
+!,18,08200MS,Eyrs - Laas,Oris - Lasa,5164800,626285,32,10.6495884,46.62486801,874,1,1,1,1,1,1
+!,19,07740WS,Zaufenkofel,Zaufenkofel,5156931,618025,32,10.5397275,46.55558188,2475,1,1,1,1,0,0
+!,20,25900MS,St.Walburg - Zoggler Stausee,Diga di Zoccolo-S.Valburga,5156180,652588,32,10.99013579,46.54187175,1142,1,1,1,1,1,1
+!,21,90000SF,Clozner Loch,Clozner Loch,5153087,655593,32,11.02826773,46.51336533,2165,1,1,1,1,0,0
+!,22,11400MS,Hintermartell,Alta Val Martello,5152929,632465,32,10.72688408,46.51689214,1720,1,1,1,1,1,1
+!,23,06400MS,Sulden,Solda,5152632,622375,32,10.59532135,46.51613029,1905,1,1,0,0,1,1
+!,24,06040WS,Schontaufspitze,Cima Beltovo,5151212,624957,32,10.62858577,46.50288178,3328,1,0,1,0,0,0
+!,25,24170WS,Weissbrunnspitz,Cima di Fontana Bianca,5150463,636135,32,10.77398314,46.49397775,3253,1,1,1,1,0,0
+!,26,06090SF,Madritsch,Madriccio,5150187,623901,32,10.61455532,46.49385601,2825,1,1,1,1,0,0
+!,27,24400MS,Weissbrunn,Fontana Bianca,5149772,640591,32,10.83181104,46.4868471,1900,1,1,0,0,1,1
+!,28,24300SF,Rossbanke,Pian dei Cavalli,5147999,638995,32,10.81049759,46.47122989,2255,1,1,1,1,0,0
+
+NumberOfMeteoStations = 28
+
+
+!>>!MeteoStation_ID=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28
+!MeteoStation_ID_PROVINCE
+!>>!MeteoStationCode=20050SF,01080SF,20720WS,00390SF,20500MS,20690SF,22210MS,15000SF,02200MS,15050WS,15590SF,15800MS,02500MS,23200MS,19300MS,03100MS,09700MS,08200MS,07740WS,25900MS,90000SF,11400MS,06400MS,06040WS,24170WS,06090SF,24400MS,24300SF
+!>>!MeteoStationName_DE=Timmelsalm,Pratznerberg,Rauhjoch,Schoneben,Pfelders,Grunboden,St.Martin in Passeier,Teufelsegg,St.Valentin auf der Haide,Grawand,Vernagt Finail,Vernagt,Marienberg,Meran - Gratsch,Naturns,Taufers,Schlanders,Eyrs - Laas,Zaufenkofel,St.Walburg - Zoggler Stausee,Clozner Loch,Hintermartell,Sulden,Schontaufspitze,Weissbrunnspitz,Madritsch,Weissbrunn,Rossbanke
+!>>!MeteoStationName_IT=Alpe del Tumulo,Monte Pratzen,Giogo Scabro,Belpiano,Plan,Prati di Plan,S.Martino in Passiria,Giovo del Diavolo,S.Valentino alla Muta,Croda delle Cornacchie,Vernago Finail,Vernago,Monte Maria,Merano - Quarazze,Naturno,Tubre,Silandro,Oris - Lasa,Zaufenkofel,Diga di Zoccolo-S.Valburga,Clozner Loch,Alta Val Martello,Solda,Cima Beltovo,Cima di Fontana Bianca,Madriccio,Fontana Bianca,Pian dei Cavalli
+!>>!MeteoStation_N_UTM=5197801,5189422,5188319,5184760,5184669,5184194,5183398,5182751,5181393,5181201,5178015,5177450,5173583,5172717,5167937,5165895,5164894,5164800,5156931,5156180,5153087,5152929,5152632,5151212,5150463,5150187,5149772,5147999
+!>>!MeteoStation_E_UTM=663615,623874,661276,614326,659362,660393,670189,634696,616720,637174,639220,641283,616288,663374,652371,611860,636292,626285,618025,652588,655593,632465,622375,624957,636135,623901,640591,638995
+!>>!MeteoStation_ZONE=32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+!>>!MeteoStation_LAT=11.1486754,10.6247484,11.11462677,10.49839507,11.08827633,11.10161089,11.22957458,10.76466049,10.52890217,10.79664483,10.822462,10.84927966,10.52126761,11.13656022,10.99117807,10.46149465,10.78026983,10.6495884,10.5397275,10.99013579,11.02826773,10.72688408,10.59532135,10.62858577,10.77398314,10.61455532,10.83181104,10.81049759
+!>>!MeteoStation_LONG=46.91357357,46.84680667,46.82887589,46.80657638,46.79651195,46.79199303,46.78240704,46.7847002,46.77587224,46.77025338,46.74117288,46.73565783,46.70568898,46.68805785,46.64766308,46.6372804,46.6237546,46.62486801,46.55558188,46.54187175,46.51336533,46.51689214,46.51613029,46.50288178,46.49397775,46.49385601,46.4868471,46.47122989
+!>>!MeteoStation_ELEV_m=2230,2450,2926,2040,1618,2015,586,3035,1499,3220,1950,1700,1310,330,541,1235,698,874,2475,1142,2165,1720,1905,3328,3253,2825,1900,2255
+!>>!MeteoStation_TA_C=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+!>>!MeteoStation_RH_perc=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1
+!>>!MeteoStation_WV_m_s=1,1,1,1,1,1,1,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1
+!>>!MeteoStation_WD_deg=1,1,1,1,1,1,1,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,1,0,1
+!>>!MeteoStation_P_mm=0,0,0,0,1,0,1,0,1,0,0,1,1,1,1,1,1,1,0,1,0,1,1,0,0,0,1,0
+!>>!MeteoStation_RS_W_m2=0,0,0,0,1,0,1,0,1,0,0,0,1,1,1,1,1,1,0,1,0,1,1,0,0,0,1,0
+
+
+
+
+
+
+
+MeteoStationCoordinateX = 663615,623874,661276,614326,659362,660393,670189,634696,616720,637174,639220,641283,616288,663374,652371,611860,636292,626285,618025,652588,655593,632465,622375,624957,636135,623901,640591,638995
+MeteoStationCoordinateY = 5197801,5189422,5188319,5184760,5184669,5184194,5183398,5182751,5181393,5181201,5178015,5177450,5173583,5172717,5167937,5165895,5164894,5164800,5156931,5156180,5153087,5152929,5152632,5151212,5150463,5150187,5149772,5147999
+MeteoStationElevation = 2230,2450,2926,2040,1618,2015,586,3035,1499,3220,1950,1700,1310,330,541,1235,698,874,2475,1142,2165,1720,1905,3328,3253,2825,1900,2255
+MeteoStationLatitude = 11.1486754,10.6247484,11.11462677,10.49839507,11.08827633,11.10161089,11.22957458,10.76466049,10.52890217,10.79664483,10.822462,10.84927966,10.52126761,11.13656022,10.99117807,10.46149465,10.78026983,10.6495884,10.5397275,10.99013579,11.02826773,10.72688408,10.59532135,10.62858577,10.77398314,10.61455532,10.83181104,10.81049759
+MeteoStationLongitude = 46.91357357,46.84680667,46.82887589,46.80657638,46.79651195,46.79199303,46.78240704,46.7847002,46.77587224,46.77025338,46.74117288,46.73565783,46.70568898,46.68805785,46.64766308,46.6372804,46.6237546,46.62486801,46.55558188,46.54187175,46.51336533,46.51689214,46.51613029,46.50288178,46.49397775,46.49385601,46.4868471,46.47122989
+MeteoStationStandardTime = 1
+MeteoStationWindVelocitySensorHeight = 5
+MeteoStationTemperatureSensorHeight = 2.5
+MeteoStationStandardTime = 1
+
+
+!======================================= 
+! METEO HAEDERS 
+!======================================= 
+
+HeaderDateDDMMYYYYhhmmMeteo="Date"
+HeaderIPrec="N"
+HeaderWindVelocity="WG"
+HeaderWindDirection="WR"
+HeaderRH="LF"
+HeaderAirTemp="LT"
+HeaderSWglobal="GS"
+HeaderCloudSWTransmissivity="CloudTrans"
+
+! Fixed minimum wind speed
+Vmin=0.1
+
+!======================================= 
+! OUTPUT POINT SETTINGS 
+!======================================= 
+
+! Mazia Meteo stations: B1(1000m),B2(1500m),B3(2000m),M4,M5
+! Province BZ Meteo Stations: 0070 Elferspitze, 0110 Melag, 0310 Taufers, 0950 Schlanders, 0540 Agums-Prad, 1930 Naturns, 0640 Schöntaufspitze
+
+CoordinatePointX = 621671,620815,621733,629601,623542,613582,626323,611860,635863,621152,652371,624957
+CoordinatePointY = 5168733,5171506,5172112,5177788,5173274,5181426,5188431,5165895,5165317,5164300,5167937,5151212
+PointID = 1,2,3,4,5,6,7,8,9,10,11,12
+
+!======================================= 
+!RATES OF DECREASE WITH ELEVATION
+!======================================= 
+! K/1000m
+! LapseRateTemp	=	6.5
+LapseRateDewTemp	=	2.5
+! mm/1000m
+LapseRatePrec	=	-0.2
+
+PrecAsIntensity = 24 
+!=======================================
+! LAND COVER
+!=======================================
+
+! Urban1,	Pasture 2,	Grassland 3,	Agricultural 4, Broad leaf forest 5,	Coniferous forest 6,	Mixed forest 7,
+! Bare Rocks 8,	Bare Soils 9,	Glacier 10,	Lake/Marsh 11
+
+NumLandCoverTypes	=	12
+!>>!LandCoverID=1,2,3,4,5,6,7,8,9,10,11,12
+!>>!LandCoverType=Urban,Pasture,Grassland,Agricultural,Broad leaf forest,Coniferous forest,Mixed forest,Bare Rocks,Bare Soils,	Glacier,Lake or Marsh,Channel Network
+SoilRoughness	=	1,10,10,10,10,10,10,10,10,1,1,1
+ThresSnowSoilRough	=	10,10,10,10,10,10,10,10,10,10,10,10
+VegHeight	=	0,200,600,600,1900,1900,1900,0,0,0,0,0
+ThresSnowVegUp	=	50,50,50,50,50,50,50,50,50,50,50,50
+ThresSnowVegDown	=	10,10,10,10,10,10,10,10,10,10,10,10,10
+LSAI	=	0,2,5,5,7,7,7,0,0,0,0,0
+CanopyFraction	=	0,0.7,1,1,1,1,1,0,0,0,0,0
+DecayCoeffCanopy	=	2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5
+VegSnowBurying	=	1,1,1,1,1,1,1,1,1,1,1,1
+RootDepth	=	0,200,300,500,700,700,700,0,0,0,0,0
+MinStomatalRes	=	60,60,60,60,60,60,60,60,60,60,60,60
+VegReflectVis	=	0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+VegReflNIR	=	0.58,0.58,0.58,0.58,0.58,0.58,0.58,0.58,0.58,0.58,0.58
+VegTransVis	=	0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05
+VegTransNIR	=	0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25
+LeafAngles	=	0,0,0,0,0,0,0,0,0,0,0,0
+CanDensSurface	=	0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5
+SoilAlbVisDry	=	0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15
+SoilAlbNIRDry	=	0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25
+SoilAlbVisWet	=	0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15
+SoilAlbNIRWet	=	0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25
+SoilEmissiv	=	0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96
+!coeff. gaukler stricker
+SurFlowResLand	=	0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.5
+! esponente gaukler stricker
+SurFlowResExp	=	0.667
+
+!=============================================================================
+!  SNOW SETTINGS
+!============================================================================
+SnowCorrFactor = 1.3
+
+FreshSnowReflVis = 0.95 
+FreshSnowReflNIR = 0.65
+SnowAgingCoeffVis = 0.2
+AlbExtParSnow   = 10
+SnowRoughness   = 2
+IrriducibleWatSatSnow  = 0.02
+DrySnowDefRate  = 1
+WetSnowDefRate  = 1.5
+ThresTempRain  = 3
+ThresTempSnow  = 1
+MoninObukhov           = 1
+RainCorrFactor       = 1.0
+DewTempOrNormTemp = 0
+SnowEmissiv  = 0.99
+SnowDensityCutoff = 100
+SnowViscosity  = 1.E6
+AlphaSnow  = 1.E5
+
+!=======================================
+! SOIL
+!=======================================
+
+SoilParFile = "soil/soil"
+SoilLayerTypes = 9
+SoilMapFile = "soiltype" 
+
+! ============== header ==========
+HeaderSoilDz = "Dz"
+HeaderLateralHydrConductivity = "Kh"
+HeaderNormalHydrConductivity = "Kv"
+HeaderThetaRes = "res"
+HeaderFieldCapacity = "fc"
+HeaderThetaSat = "sat"
+HeaderAlpha = "a"
+HeaderN = "n"
+HeaderSpecificStorativity = "SS"
+HeaderWiltingPoint			=	"wilt"	
+
+
+! [mm] 
+InitWaterTableDepth = 0
+! [C]
+InitSoilTemp	=	4
+! [-]
+WiltingPoint	=	0.15
+
+ThermalConductivitySoilSolids	=	2.5
+!
+ThermalCapacitySoilSolids	=	2.30E+06
+! [mm^-1]
+
+FrozenSoilHydrCondReduction  = 0
+! [mm] 
+ 
+FreeDrainageAtBottom	=	0
+  
+FreeDrainageAtLateralBorder = 1					
+PointDepthFreeSurface = 1000	
+
+
+!=======================================
+! BEDROCK
+!=======================================
+
+NormalHydrConductivityBedrock = 1E-6
+LateralHydrConductivityBedrock = 1E-5
+ThetaResBedrock =  0.02
+ThetaSatBedrock = 0.2
+AlphaVanGenuchtenBedrock = 0.01
+NVanGenuchtenBedrock = 2
+
+
+!======================================= 
+! SNOW AND GLACIERS 
+!======================================= 
+ 
+MaxWaterEqSnowLayerContent = 10
+SWEtop   = 2000
+SWEbottom   = 50
+MaxSnowLayersMiddle    = 50
+
+InitGlacierDensity = 700
+InitGlacierTemp = -5
+
+! MaxWaterEqGlacLayerContent=50
+! GWEtop=300
+! GWEbottom=100
+! MaxGlacLayersMiddle=3
+
+!=======================================
+! CHANNELS
+!=======================================
+
+RatioChannelWidthPixelWidth = 0.1
+! in [mm]
+ChannelDepression = 800
+
+ThresWaterDepthLandInf = 5
+ThresWaterDepthLandSup = 50
+
+! coeff. gaukler stricker canale
+SurFlowResChannel             = 20
+DepthFreeSurfaceAtTheBoundary = 250
+
+ThresWaterDepthChannel = 100
+
+!======================================= 
+!Numerical parameters 
+!======================================= 
+ 
+RichardTol	            = 1.E-5
+MinLambdaWater		    = 1.E-10 
+RichardMaxIter		    = 50
+ExitMinLambdaWater 	    = 1
+UpdateHydraulicConductivity = 0
+MinRatioKactualToKSat 	    = 1E-8
+
+MaxCourantSupFlowLand	=	0.1 
+MaxCourantSupFlowChannel	=	0.1
+MinSupWaterDepthLand	=	1 
+MinSupWaterDepthChannel	=	1
+MinDiffSupWaterDepthLandChannel = 5
+
+MinTimeStep        = 10
+MinTimeStepSupFlow = 10
+
+HeatEqTol	=	1.E-4 
+HeatEqMaxIter	=	200 
+								 
+
+CanopyMaxIter	=	3 
+BusingerMaxIter	=	3 
+TsMaxIter	=	3 
+LocMaxIter	=	3 
+
+! Morphological parameters
+SlopeWeight = 1 
+CurvatureWeight = 100
+NumLowPassFilterOnDemForAll = 2
+NumLowPassFilterOnDemForCurv = 2
+
+! Energy budget settings 
+FlagSkyViewFactor	=	1 
+LWinParameterization	=	4 
+MoninObukhov	=	2 
+CanopyStabCorrection	=	1 
+CalculateCastShadow = 1
+
+!=============================================================================
+!  FILE NAMES
+!=============================================================================
+
+! Input files 
+
+DemFile = "input-maps/dem"
+MeteoFile = "meteo/meteo_NEW"
+!>>!OldMeteoFile = "meteo/meteo"
+!>>!OldLandCoverMapFile = "input-maps/landcover"
+LandCoverMapFile = "input-maps/landcover_with_net"
+SkyViewFactorMapFile = "input-maps/sky"
+SlopeMapFile = "input-maps/slope"
+AspectMapFile = "input-maps/aspect"
+CurvaturesMapFile = "input-maps/curvature"
+HorizonMeteoStationFile = "horizon/horizon"
+RiverNetwork = "input-maps/net_v_00_10_11"
+!>>!OldRiverNetwork = "input-maps/net"
+! InitGlacierDepthMapFile = "glacier0"
+! BedrockDepthMapFile = "input-maps/bedrock2"
+
+! InitSnowDepthMapFile = "input-maps/SnowDepth"
+! InitSWEMapFile = "input-maps/SWEglacier"
+! InitSnowAgeMapFile = "input-maps/SnowAge"
+
+
+! Output files
+
+! Tabs 
+DischargeFile = "output-tabs/discharge"
+
+PointOutputFile = "output-tabs/point" 
+PointAll = 1
+
+BasinOutputFile = "output-tabs/basin" 
+
+BasinAll = 1
+
+SoilTempProfileFile="output-tabs/soiltemp"
+SoilLiqContentProfileFile = "output-tabs/thetaliq" 
+SoilIceContentProfileFile = "output-tabs/thetaice" 
+SoilIceContentProfileFile = "output-tabs/thetaice" 
+SoilLiqWaterPressProfileFile = "output-tabs/psiliq"
+SoilTotWaterPressProfileFile = "output-tabs/psitot"
+SoilAll = 1
+
+
+
+! Maps
+
+SoilAveragedTempTensorFile = "output-maps/T"
+SurfaceTempMapFile = "output-maps/Ts"
+
+
+
+! SOIL
+SoilLiqContentTensorFile = "output-maps/thetaliq" 
+!/thetaliq"
+SoilIceContentTensorFile = "output-maps/thetaice"
+!/thetaice"
+SoilTotWaterPressTensorFile = "output-maps/psitot"
+SoilLiqWaterPressTensorFile = "output-maps/psiliq"
+!! added liq water pressure by Emanuele  20231106
+!SoilTotWaterPressTensorFile = "output-maps/psi"
+!/psi"
+LandSurfaceWaterDepthMapFile = "output-maps/hsup"
+!/hsup"
+WaterTableDepthMapFile = "output-maps/watertable"
+!/watertable"
+
+
+! SNOW
+SWEMapFile = "output-maps/SWE"
+SnowDepthMapFile = "output-maps/snowdepth"
+SnowMeltedMapFile= "output-maps/snowmelt"
+
+! SURFACE
+NetShortwaveRadiationMapFile = "output-maps/SWnet"
+InShortwaveRadiationMapFile= "output-maps/SWin"
+NetLongwaveRadiationMapFile = "output-maps/LWnet"
+InLongwaveRadiationMapFile= "output-maps/LWin"
+NetRadiationMapFile= "output-maps/RadNet"
+SurfaceHeatFluxMapFile = "output-maps/EB"
+SurfaceSensibleHeatFluxMapFile = "output-maps/H"
+SurfaceLatentHeatFluxMapFile = "output-maps/LE"
+EvapotranspirationFromSoilMapFile = "output-maps/ET"
+
+
+! METEO
+PrecipitationMapFile = "output-maps/Prec"
+NetPrecipitationFile = "output-maps/Pnet"
+AirTempMapFile = "output-maps/Ta"
+
+!=============================================================================
+!  RECOVERY FILE NAMES
+!=============================================================================
+SubfolderRecoveryFiles = "rec"
+ContinuousRecovery = 1
+! SavingPoints = 2,4,6
+!RecoverSim = 0

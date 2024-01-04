@@ -1,0 +1,328 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> #!/usr/bin/env Rscript
+> #### CRATION OF WEATHER TIME SERIES FOR GEOTOP 
+> ####
+> #### @Author Emanuele Cordano 
+> ####
+> ###
+> library(meteobz)
+Loading required package: magrittr
+Loading required package: data.table
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Loading required package: dplyr
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:data.table’:
+
+    between, first, last
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: ‘meteobz’
+
+The following objects are masked _by_ ‘.GlobalEnv’:
+
+    get_data_from_station, get_data_from_zrx_file
+
+> library(geotopbricks)
+Loading required package: raster
+Loading required package: sp
+The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+which was just loaded, will retire in October 2023.
+Please refer to R-spatial evolution reports for details, especially
+https://r-spatial.org/r/2023/05/15/evolution4.html.
+It may be desirable to make the sf package available;
+package maintainers should consider adding sf to Suggests:.
+The sp package is now running under evolution status 2
+     (status 2 uses the sf package in place of rgdal)
+
+Attaching package: ‘raster’
+
+The following object is masked from ‘package:dplyr’:
+
+    select
+
+Loading required package: stringr
+Loading required package: sf
+Linking to GEOS 3.11.1, GDAL 3.6.4, PROJ 9.1.1; sf_use_s2() is TRUE
+> library(zoo)
+> library(dplyr)
+> library(data.table)
+> ####
+> source('/home/ecor/local/rpackages/rendena100/meteobz/R/get_data_from_zrx_file.R')
+> source('/home/ecor/local/rpackages/rendena100/meteobz/R/get_data_from_station.R')
+> ####
+> 
+> 
+> 
+> wpath_meteo <- "/home/ecor/local/data/climate/south_tyrol/MeteoDataProvinceBZ/"
+> wpath_geotop <- "/home/ecor/local/repos/geotop_r_templink/geotop_simulations/templates/venosta_2024_00001/" ### TEST_Venosta_3D_034_template/" 
+> variables <- c("HeaderIPrec","HeaderWindVelocity","HeaderWindDirection","HeaderRH","HeaderAirTemp","HeaderSWglobal") %>% 
++   get.geotop.inpts.keyword.value(wpath=wpath_geotop) %>% unlist()
+> 
+> 
+> geotop_meteo_stations <- get.geotop.inpts.keyword.value("MeteoStationCode",wpath=wpath_geotop,vector_sep=",")
+> 
+> print(variables)
+        HeaderIPrec  HeaderWindVelocity HeaderWindDirection            HeaderRH 
+                "N"                "WG"                "WR"                "LF" 
+      HeaderAirTemp      HeaderSWglobal 
+               "LT"                "GS" 
+> 
+> 
+> tz <- "Etc/GMT-1"
+> 
+> meteo_new_ky <- get.geotop.inpts.keyword.value("MeteoFile",wpath=wpath_geotop,add_wpath=TRUE)
+> 
+> 
+> 
+> 
+> for (it in geotop_meteo_stations) {
++   
++   level <- which(geotop_meteo_stations==it)
++    
++   
++    
++   
++    meteo_new <- get_data_from_station(var=variables,station=it,wpath=wpath_meteo,tz=tz,
++                                       HeaderIPrec=variables["HeaderIPrec"],
++                                       HeaderWindVelocity=variables["HeaderWindVelocity"],
++                                       HeaderWindDirection=variables["HeaderWindDirection"],
++                                       aggregation.timestep=3600,returns.as.zoo = TRUE,no.xy.windv=TRUE)
++                                       
++  
++   
++   
++   file_prefix <- paste0(meteo_new_ky,"_NEW")
++   create.geotop.meteo.files(x=meteo_new,file_prefix=file_prefix,level=level) 
++   
++   
++ }
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Joining with `by = join_by(timestamp, status, translatedStatus, station,
+timestamp_aggr)`
+Joining with `by = join_by(timestamp, value, status, translatedStatus,
+variable, station, timestamp_aggr)`
+`summarise()` has grouped output by 'timestamp_aggr', 'variable'. You can
+override using the `.groups` argument.
+Joining with `by = join_by(timestamp)`
+Warning messages:
+1: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"variable"` instead of `.data$variable` 
+2: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"speed"` instead of `.data$speed` 
+3: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"angle"` instead of `.data$angle` 
+4: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"timestamp"` instead of `.data$timestamp` 
+5: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"value"` instead of `.data$value` 
+6: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"WX"` instead of `.data$WX` 
+7: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+ℹ Please use `"WY"` instead of `.data$WY` 
+> 
+> ## END
+> 
+> proc.time()
+   user  system elapsed 
+413.307   3.681 416.560 

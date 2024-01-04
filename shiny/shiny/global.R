@@ -22,7 +22,7 @@ library(dygraphs)
 library(zoo)
 
 #wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
-wpath <- '/home/ecor/local/geotop_simulations/Venosta_3D_037/'
+wpath <- '/home/ecor/local/geotop_simulations/Venosta_3D_036/'
 tz="Etc/GMT-1" ## check on geotop.inpts
 ###
 start <-  get.geotop.inpts.keyword.value("InitDateDDMMYYYYhhmm",
@@ -51,7 +51,7 @@ pal_et <- colorNumeric("BuGn",val_et,na.color="#00000000")
 ###############
 ###############
 ###############
-## Variable keywords
+## Variable keywords (GEO-SPATIAL MAP)
 variables  <- list(
   ##!SOIL
   
@@ -109,6 +109,16 @@ variables  <- list(
  
  
 )
+
+# ### VARIABLE SOIL PROFILE 
+# SoilTempProfileFile="output-tabs/soiltemp"
+# SoilLiqContentProfileFile = "output-tabs/thetaliq" 
+# SoilIceContentProfileFile = "output-tabs/thetaice" 
+# SoilIceContentProfileFile = "output-tabs/thetaice" 
+# SoilLiqWaterPressProfileFile = "output-tabs/psiliq"
+# SoilTotWaterPressProfileFile = "output-tabs/psitot"
+
+
 
 variable_default <- "Total_Soil_Water_pressure"
 
