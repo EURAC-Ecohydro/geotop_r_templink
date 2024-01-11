@@ -23,15 +23,7 @@ source('./global.R')
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
- 
-  ## Static Vsualization
-  output$image_logo <-  renderImage({
-    list(src = "logo/geotop_logo.jpg",
-         alt = "This is alternate text"
-    )
-  }, deleteFile = FALSE)
-  
-  ## Dynamic Visualization
+
   output$meteo_station_table <- renderTable({
     if (input$meteo) {
       print(meteo)
@@ -43,7 +35,7 @@ function(input, output, session) {
   
 
   output$map2 <- renderLeaflet({ 
-    outleaf <- leaflet() %>% addProviderTiles(input$basemap) %>% addScaleBar(position="bottomleft")
+    outleaf <- leaflet() %>% addProviderTiles(input$basemap) 
     outleaf %>% fitBounds(west, south, east, north) 
   ##setView((east+west)/2,(north+south)/2,zoom=7)
   ##fitBounds(west, south, east, north) 

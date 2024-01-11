@@ -22,13 +22,12 @@ library(dygraphs)
 library(zoo)
 
 #wpath <- '/stablo001/local/simulations/venosta_2023/run/TEST_Venosta_3D_034/' 
-#wpath <- '/home/ecor/local/geotop_simulations/Venosta_3D_036/'
-wpath <- '/home/ecor/local/geotop_simulations/venosta_2024_00001/'
+wpath <- '/home/ecor/local/geotop_simulations/Venosta_3D_036/'
 tz="Etc/GMT-1" ## check on geotop.inpts
 ###
 start <-  get.geotop.inpts.keyword.value("InitDateDDMMYYYYhhmm",
                                          date=TRUE,wpath=wpath,tz=tz) 
-end <- get.geotop.inpts.keyword.value("EndDateDDMMYYYYhhmm01Run",
+end <- get.geotop.inpts.keyword.value("EndDateDDMMYYYYhhmm",
                                       date=TRUE,wpath=wpath,tz=tz)-days(1)
 ###__###
 val_theta <- seq(from=0,to=0.7,by=0.01)
