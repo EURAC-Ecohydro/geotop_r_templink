@@ -187,6 +187,7 @@ nMeteoVars <- c(nIPrec,nAirTemp,nRH,nWindVelocity,nWindDirection,nSWglobal,nClou
 
 
 ## CHECK POINTS
+maxcrec <- 10
 checkpoints <- get.geotop.points(prefix="CoordinatePoint",suffixes=c("ID","Name"),wpath=wpath)
 checkpoints$ID <- as.numeric(checkpoints$CoordinatePointID)
 checkpoints <- checkpoints %>% st_transform(crs=4326)
@@ -194,7 +195,7 @@ checkpoints <- checkpoints %>% st_transform(crs=4326)
 date_field_ckp <- "Date12.DDMMYYYYhhmm." ## It's a peculiarity of thias simulation.
 checkpoint_key <- "PointOutputFile"
 checkpoint_data <- get.geotop.inpts.keyword.value(checkpoint_key,date_field=date_field_ckp,wpath=wpath,data.frame=TRUE,
-                                        level=1,tz=tz,ContinuousRecovery = 5)
+                                        level=1,tz=tz,ContinuousRecovery= maxcrec)
 
 ### Date12[DDMMYYYYhhmm],JulianDayFromYear0[days],
 ###TimeFromStart[days],Simulation_Period,Run,IDpoint,Psnow_over_canopy[mm],
