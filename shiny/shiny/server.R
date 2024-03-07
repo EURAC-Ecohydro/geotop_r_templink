@@ -99,9 +99,9 @@ function(input, output, session) {
     print("ba")
     args_legend$layerId <- "legend"
     if (args$one.layer==TRUE) { 
-      input_layer <- 1 
+      input_layer <<- 1 
     } else {
-      input_layer <- as.numeric(input$layer)
+      input_layer <<- as.numeric(input$layer)
     }  
     outleaf <- outleaf %>% removeControl(layerId=args_legend$layerId) %>% removeControl(layerId="meteostations")
     outleaf <- outleaf %>% addRasterImage(outvar[[input_layer]],opacity=0.7,colors=args_legend$pal,method="ngb")
@@ -433,6 +433,39 @@ basin_plot <- reactive({
 })
 
 
+## WEATHER  STATION AND CHACKPOINTS POPUP CODE ## TO DO 
+map_click <- reactive ({
+  
+  ## TO DO
+  event <- input$map2_click
+  print("a")
+  print(event)
+  print("b")
+  if (is.null(event))
+    return()
+  
+  ##  isolate({
+  print(event)
+  id <- event$id
+  rr <- outvar[[input_layer]]
+  #event0 <<- event
+  ## 20240309 TO DEVELOP
+  xy <- st_point(unlist(event[c("lng","lat")])) %>% st_sfc(crs=4326) %>% st_transform(crs=crs(rr)) %>% st_coordinates()
+  ival <- cellFromXY(rr,xy)
+  val <- rr[ival]
+ ## popup <- paste(paste0(names(event),unlist(event),sep="_"),collapse="; ")
+  popup <- sprintf("value: %s",as.character(val))
+  outleaf <- leafletProxy("map2") %>% clearPopups() %>% addPopups(lng=event$lng,lat=event$lat,popup=popup) ###lng=coords0$lng,lat=coords0$lat
+    
+
+  outleaf
+ 
+  
+  
+  
+  
+  
+})
 
 
 
@@ -444,6 +477,13 @@ observeEvent(input$basemap,{
  geotop_map()
   ##background_map()
   })
+
+
+
+
+
+
+
 observeEvent(input$variable,{geotop_map()})
 observeEvent(input$time,{geotop_map()})
 observeEvent(input$layer,{geotop_map()})
@@ -452,6 +492,5 @@ observeEvent(input$checkpoints,{geotop_map()})
 ##observeEvent(input$map2_marker_click,{weather_station_click()}) 
 ###observeEvent(input$map2_marker_click,{checkpoint_click()}) 
 observeEvent(input$map2_marker_click,{marker_click()}) 
+observeEvent(input$map2_click,{map_click()}) 
 }
-
-
